@@ -41,7 +41,6 @@ const App: React.FC = () => {
       setFilter(event.target.value);
     });
   };
-  console.log({ hasError });
 
   return (
     <ProfilerComponent

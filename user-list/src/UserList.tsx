@@ -17,8 +17,6 @@ const UserList: React.FC<UserListProps> = ({ hasError, users }) => {
     throw new Error("No users available");
   }
 
-  console.log({ hasError });
-
   return (
     <>
       {!users.length ? (
