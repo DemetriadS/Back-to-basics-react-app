@@ -1,4 +1,5 @@
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { loadState, saveState } from "./localStorageUtils.ts";
 
 interface AppState {
   users: any[];
@@ -10,6 +11,8 @@ interface AppState {
     age: string;
   };
 }
+
+const persistedState = loadState();
 
 const initialState: AppState = {
   users: [],
@@ -39,6 +42,12 @@ export const { setUsers, updateFilter } = userListSlice.actions;
 
 const store = configureStore({
   reducer: userListSlice.reducer,
+  preloadedState: persistedState, // Use persisted state
+});
+
+// Save state to localStorage whenever it changes to keep the changes
+store.subscribe(() => {
+  saveState(store.getState());
 });
 
 export type RootState = ReturnType<typeof store.getState>;
