@@ -5,9 +5,23 @@ import ProfilerComponent from "./Profiler.tsx";
 
 const UserList = React.lazy(() => import("./UserList.tsx"));
 
+interface FilterCriteria {
+  firstName: string;
+  lastName: string;
+  city: string;
+  gender: string;
+  age: string;
+}
+
 const App: React.FC = () => {
   const [users, setUsers] = useState<[]>([]);
-  const [filter, setFilter] = useState<string>("");
+  const [filters, setFilters] = useState<FilterCriteria>({
+    firstName: "",
+    lastName: "",
+    city: "",
+    gender: "",
+    age: "",
+  });
   const [isPending, startTransition] = useTransition();
   const [hasError, setHasError] = useState<boolean>(false);
   const [profileLoaded, setProfileLoaded] = useState<boolean>(false);
@@ -31,14 +45,38 @@ const App: React.FC = () => {
         console.error("Error fetching data");
       });
   }, []);
+  console.log({ users });
 
-  const filteredUsers = users.filter((user) =>
-    user.name.first.toLowerCase().startsWith(filter.toLowerCase())
-  );
+  const filteredUsers = users.filter((user) => {
+    const { firstName, lastName, city, gender, age } = filters;
+    const matchesFirstName =
+      !firstName ||
+      user.name.first.toLowerCase().includes(firstName.toLowerCase());
+    const matchesLastName =
+      !lastName ||
+      user.name.last.toLowerCase().includes(lastName.toLowerCase());
+    const matchesCity =
+      !city || user.location.city.toLowerCase().includes(city.toLowerCase());
+    const matchesGender =
+      !gender || user.gender.toLowerCase() === gender.toLowerCase();
+    const matchesAge = !age || user.dob.age === parseInt(age, 10);
+
+    return (
+      matchesFirstName &&
+      matchesLastName &&
+      matchesCity &&
+      matchesGender &&
+      matchesAge
+    );
+  });
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
     startTransition(() => {
-      setFilter(event.target.value);
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [name]: value,
+      }));
     });
   };
 
@@ -51,12 +89,43 @@ const App: React.FC = () => {
     >
       <h1>User List</h1>
       <div className="App">
-        <input
-          type="text"
-          value={filter}
-          onChange={handleFilterChange}
-          placeholder="Filter by name"
-        />
+        <div className="filters">
+          <input
+            type="text"
+            name="firstName"
+            value={filters.firstName}
+            onChange={handleFilterChange}
+            placeholder="Filter by first name"
+          />
+          <input
+            type="text"
+            name="lastName"
+            value={filters.lastName}
+            onChange={handleFilterChange}
+            placeholder="Filter by last name"
+          />
+          <input
+            type="text"
+            name="city"
+            value={filters.city}
+            onChange={handleFilterChange}
+            placeholder="Filter by city"
+          />
+          <input
+            type="text"
+            name="gender"
+            value={filters.gender}
+            onChange={handleFilterChange}
+            placeholder="Filter by gender"
+          />
+          <input
+            type="number"
+            name="age"
+            value={filters.age}
+            onChange={handleFilterChange}
+            placeholder="Filter by age"
+          />
+        </div>
         {isPending && <div>Updating list...</div>}
         <Suspense fallback={<div>Loading...</div>}>
           <ErrorBoundaryComponent>
