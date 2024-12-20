@@ -6,6 +6,7 @@ import {
   setUsers,
   updateFilter,
 } from "../../store/store.ts";
+import { selectFilteredUsers } from "../../store/selectors.ts";
 import ErrorBoundaryComponent from "./ErrorBoundary.tsx";
 import "./App.css";
 import ProfilerComponent from "./AppProfiler.tsx";
@@ -39,31 +40,9 @@ const App: React.FC = () => {
         console.error("Error fetching data");
       });
   }, [dispatch]);
-  const filteredUsers = users
-    ? users.filter((user) => {
-        const { firstName, lastName, city, gender, age } = filters;
-        const matchesFirstName =
-          !firstName ||
-          user.name.first.toLowerCase().includes(firstName.toLowerCase());
-        const matchesLastName =
-          !lastName ||
-          user.name.last.toLowerCase().includes(lastName.toLowerCase());
-        const matchesCity =
-          !city ||
-          user.location.city.toLowerCase().includes(city.toLowerCase());
-        const matchesGender =
-          !gender || user.gender.toLowerCase() === gender.toLowerCase();
-        const matchesAge = !age || user.dob.age === parseInt(age, 10);
-
-        return (
-          matchesFirstName &&
-          matchesLastName &&
-          matchesCity &&
-          matchesGender &&
-          matchesAge
-        );
-      })
-    : [];
+  const filteredUsers = useSelector((state: RootState) =>
+    selectFilteredUsers(state)
+  );
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
