@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense, useTransition } from "react";
-import { useAppStore } from "../../store/store.ts";
+import useAppStore from "../../store/store.ts";
 import ErrorBoundaryComponent from "./ErrorBoundary.tsx";
 import "./App.css";
 import ProfilerComponent from "./AppProfiler.tsx";
@@ -31,7 +31,7 @@ const App: React.FC = () => {
         setProfileLoaded(true);
         console.error("Error fetching data");
       });
-  }, [setUsers]);
+  }, [users.length, setUsers]);
   console.log({ users });
 
   const filteredUsers = users.filter((user) => {

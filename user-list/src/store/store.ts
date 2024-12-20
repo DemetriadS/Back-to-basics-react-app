@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface User {
   name: {
@@ -29,18 +30,30 @@ interface AppState {
   updateFilter: (key: string, value: string) => void;
 }
 
-export const useAppStore = create<AppState>((set) => ({
-  users: [],
-  filters: {
-    firstName: "",
-    lastName: "",
-    city: "",
-    gender: "",
-    age: "",
-  },
-  setUsers: (users) => set({ users }),
-  updateFilter: (key, value) =>
-    set((state) => ({
-      filters: { ...state.filters, [key]: value },
-    })),
-}));
+const useAppStore = create<AppState>()(
+  persist(
+    (set) => ({
+      users: [],
+      filters: {
+        firstName: "",
+        lastName: "",
+        city: "",
+        gender: "",
+        age: "",
+      },
+      setUsers: (users) =>
+        set(() => ({
+          users,
+        })),
+      updateFilter: (key, value) =>
+        set((state) => ({
+          filters: { ...state.filters, [key]: value },
+        })),
+    }),
+    {
+      name: "appState", // The name of the Key found in localStorage
+    }
+  )
+);
+
+export default useAppStore;
