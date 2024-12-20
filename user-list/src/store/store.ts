@@ -1,5 +1,8 @@
 import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { loadState, saveState } from "./localStorageUtils.ts";
+import {
+  loadState,
+  saveState,
+} from "../components/shared/localStorageUtils.ts";
 
 interface AppState {
   users: any[];

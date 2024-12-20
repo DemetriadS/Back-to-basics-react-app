@@ -1,11 +1,17 @@
 import React, { useState, useEffect, Suspense, useTransition } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState, AppDispatch, setUsers, updateFilter } from "./store.ts";
+import {
+  RootState,
+  AppDispatch,
+  setUsers,
+  updateFilter,
+} from "../../store/store.ts";
 import ErrorBoundaryComponent from "./ErrorBoundaryComponent.tsx";
 import "./App.css";
 import ProfilerComponent from "./Profiler.tsx";
+import Filters from "./Filters.tsx";
 
-const UserList = React.lazy(() => import("./UserList.tsx"));
+const UserList = React.lazy(() => import("../UserList/UserList.tsx"));
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -74,43 +80,7 @@ const App: React.FC = () => {
     >
       <h1>User List</h1>
       <div className="App">
-        <div className="filters">
-          <input
-            type="text"
-            name="firstName"
-            value={filters.firstName}
-            onChange={handleFilterChange}
-            placeholder="Filter by first name"
-          />
-          <input
-            type="text"
-            name="lastName"
-            value={filters.lastName}
-            onChange={handleFilterChange}
-            placeholder="Filter by last name"
-          />
-          <input
-            type="text"
-            name="city"
-            value={filters.city}
-            onChange={handleFilterChange}
-            placeholder="Filter by city"
-          />
-          <input
-            type="text"
-            name="gender"
-            value={filters.gender}
-            onChange={handleFilterChange}
-            placeholder="Filter by gender"
-          />
-          <input
-            type="number"
-            name="age"
-            value={filters.age}
-            onChange={handleFilterChange}
-            placeholder="Filter by age"
-          />
-        </div>
+        <Filters filters={filters} onFilterChange={handleFilterChange} />
         {isPending && <div>Updating list...</div>}
         <Suspense fallback={<div>Loading...</div>}>
           <ErrorBoundaryComponent>
