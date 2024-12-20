@@ -1,59 +1,59 @@
-import { configureStore, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import {
-  loadState,
-  saveState,
-} from "../components/shared/localStorageUtils.ts";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-interface AppState {
-  users: any[];
-  filters: {
-    firstName: string;
-    lastName: string;
+interface User {
+  name: {
+    first: string;
+    last: string;
+  };
+  location: {
     city: string;
-    gender: string;
-    age: string;
+  };
+  gender: string;
+  dob: {
+    age: number;
   };
 }
 
-const persistedState = loadState();
+interface Filters {
+  firstName: string;
+  lastName: string;
+  city: string;
+  gender: string;
+  age: string;
+}
 
-const initialState: AppState = {
-  users: [],
-  filters: {
-    firstName: "",
-    lastName: "",
-    city: "",
-    gender: "",
-    age: "",
-  },
-};
+interface AppState {
+  users: User[];
+  filters: Filters;
+  setUsers: (users: User[]) => void;
+  updateFilter: (key: string, value: string) => void;
+}
 
-const userListSlice = createSlice({
-  name: "userList",
-  initialState,
-  reducers: {
-    setUsers(state, action: PayloadAction<any[]>) {
-      state.users = action.payload;
-    },
-    updateFilter(state, action: PayloadAction<{ key: string; value: string }>) {
-      state.filters[action.payload.key] = action.payload.value;
-    },
-  },
-});
+const useAppStore = create<AppState>()(
+  persist(
+    (set) => ({
+      users: [],
+      filters: {
+        firstName: "",
+        lastName: "",
+        city: "",
+        gender: "",
+        age: "",
+      },
+      setUsers: (users) =>
+        set(() => ({
+          users,
+        })),
+      updateFilter: (key, value) =>
+        set((state) => ({
+          filters: { ...state.filters, [key]: value },
+        })),
+    }),
+    {
+      name: "appState", // The name of the Key found in localStorage
+    }
+  )
+);
 
-export const { setUsers, updateFilter } = userListSlice.actions;
-
-const store = configureStore({
-  reducer: userListSlice.reducer,
-  preloadedState: persistedState, // Use persisted state
-});
-
-// Save state to localStorage whenever it changes to keep the changes
-store.subscribe(() => {
-  saveState(store.getState());
-});
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
-
-export default store;
+export default useAppStore;
