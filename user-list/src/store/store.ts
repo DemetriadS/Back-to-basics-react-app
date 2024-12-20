@@ -45,7 +45,7 @@ export const { setUsers, updateFilter } = userListSlice.actions;
 
 const store = configureStore({
   reducer: userListSlice.reducer,
-  preloadedState: persistedState, // Use persisted state
+  preloadedState: persistedState ? persistedState : initialState, // Use persisted state
 });
 
 // Save state to localStorage whenever it changes to keep the changes

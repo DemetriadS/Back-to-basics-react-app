@@ -13,16 +13,14 @@ const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
   );
 };
 
-interface ErrorBoundaryComponentProps {
+interface ErrorBoundaryProps {
   children: React.ReactNode;
 }
 
-const ErrorBoundaryComponent: React.FC<ErrorBoundaryComponentProps> = ({
-  children,
-}) => (
+const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => (
   <ReactErrorBoundary FallbackComponent={ErrorFallback}>
     {children}
   </ReactErrorBoundary>
 );
 
-export default ErrorBoundaryComponent;
+export default ErrorBoundary;
