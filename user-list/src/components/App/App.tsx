@@ -1,21 +1,14 @@
 import React, { useState, useEffect, Suspense, useTransition } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  RootState,
-  AppDispatch,
-  setUsers,
-  updateFilter,
-} from "../../store/store.ts";
-import ErrorBoundaryComponent from "./ErrorBoundaryComponent.tsx";
+import { useAppStore } from "../../store/store.ts";
+import ErrorBoundaryComponent from "./ErrorBoundary.tsx";
 import "./App.css";
-import ProfilerComponent from "./Profiler.tsx";
-import Filters from "./Filters.tsx";
+import ProfilerComponent from "./AppProfiler.tsx";
+import Filters from "./FilterInputs.tsx";
 
 const UserList = React.lazy(() => import("../UserList/UserList.tsx"));
 
 const App: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { users, filters } = useSelector((state: RootState) => state);
+  const { users, filters, setUsers, updateFilter } = useAppStore();
   const [isPending, startTransition] = useTransition();
   const [hasError, setHasError] = useState<boolean>(false);
   const [profileLoaded, setProfileLoaded] = useState<boolean>(false);
@@ -31,14 +24,14 @@ const App: React.FC = () => {
       })
       .then((data) => {
         setProfileLoaded(true);
-        dispatch(setUsers(data.results));
+        setUsers(data.results);
       })
       .catch(() => {
         setHasError(true);
         setProfileLoaded(true);
         console.error("Error fetching data");
       });
-  }, [dispatch]);
+  }, [setUsers]);
   console.log({ users });
 
   const filteredUsers = users.filter((user) => {
@@ -67,7 +60,7 @@ const App: React.FC = () => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     startTransition(() => {
-      dispatch(updateFilter({ key: name, value }));
+      updateFilter(name, value);
     });
   };
 

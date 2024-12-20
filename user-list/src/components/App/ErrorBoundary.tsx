@@ -17,12 +17,10 @@ interface ErrorBoundaryComponentProps {
   children: React.ReactNode;
 }
 
-const ErrorBoundaryComponent: React.FC<ErrorBoundaryComponentProps> = ({
-  children,
-}) => (
+const ErrorBoundary: React.FC<ErrorBoundaryComponentProps> = ({ children }) => (
   <ReactErrorBoundary FallbackComponent={ErrorFallback}>
     {children}
   </ReactErrorBoundary>
 );
 
-export default ErrorBoundaryComponent;
+export default ErrorBoundary;
