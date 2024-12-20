@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import getFilteredUsers from "./selectors.ts";
 
 interface User {
   name: {
@@ -23,7 +24,7 @@ interface Filters {
   age: string;
 }
 
-interface AppState {
+export interface AppState {
   users: User[];
   filters: Filters;
   setUsers: (users: User[]) => void;
@@ -32,7 +33,7 @@ interface AppState {
 
 const useAppStore = create<AppState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       users: [],
       filters: {
         firstName: "",
@@ -49,6 +50,7 @@ const useAppStore = create<AppState>()(
         set((state) => ({
           filters: { ...state.filters, [key]: value },
         })),
+      filteredUsers: () => getFilteredUsers(get()),
     }),
     {
       name: "appState", // The name of the Key found in localStorage
