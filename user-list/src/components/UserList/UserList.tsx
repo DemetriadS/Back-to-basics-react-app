@@ -1,4 +1,5 @@
 import React from "react";
+import "./UserList.css";
 
 interface User {
   name: {
@@ -22,13 +23,28 @@ const UserList: React.FC<UserListProps> = ({ hasError, users }) => {
       {!users.length ? (
         <div>No users available to display.</div>
       ) : (
-        <ul>
-          {users.map((user, index) => (
-            <li key={index}>
-              {user.name.first} {user.name.last}
-            </li>
-          ))}
-        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>City</th>
+              <th>Gender</th>
+              <th>Age</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user, index) => (
+              <tr key={index}>
+                <td>{user.name.first}</td>
+                <td>{user.name.last}</td>
+                <td>{user.location.city}</td>
+                <td>{user.gender}</td>
+                <td>{user.dob.age}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       )}
     </>
   );
