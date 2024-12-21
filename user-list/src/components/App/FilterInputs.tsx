@@ -1,4 +1,5 @@
 import React from "react";
+import "./FilterInputs.css";
 
 interface FilterProps {
   filters: { [key: string]: string };
