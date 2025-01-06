@@ -4,7 +4,7 @@ import { RootState } from "./store";
 export const selectFilteredUsers = createSelector(
   [(state: RootState) => state.users, (state: RootState) => state.filters],
   (users, filters) => {
-    return users.filter((user) => {
+    return users?.filter((user) => {
       const { firstName, lastName, city, gender, age } = filters;
       const matchesFirstName =
         !firstName ||

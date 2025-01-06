@@ -3,6 +3,7 @@ import "./FilterInputs.css";
 import { FilterProps } from "../../types";
 
 const Filters: React.FC<FilterProps> = ({ filters, onFilterChange }) => {
+  console.log(filters);
   return (
     <div className="filters">
       {Object.entries(filters).map(([key, value]) => (
