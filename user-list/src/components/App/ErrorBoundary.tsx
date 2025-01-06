@@ -3,6 +3,7 @@ import {
   ErrorBoundary as ReactErrorBoundary,
   FallbackProps,
 } from "react-error-boundary";
+import { ErrorBoundaryProps } from "../../types";
 
 const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
   return (
@@ -12,10 +13,6 @@ const ErrorFallback: React.FC<FallbackProps> = ({ error }) => {
     </div>
   );
 };
-
-interface ErrorBoundaryProps {
-  children: React.ReactNode;
-}
 
 const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({ children }) => (
   <ReactErrorBoundary FallbackComponent={ErrorFallback}>

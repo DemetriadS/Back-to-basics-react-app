@@ -1,10 +1,6 @@
 import React from "react";
 import "./FilterInputs.css";
-
-interface FilterProps {
-  filters: { [key: string]: string };
-  onFilterChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
+import { FilterProps } from "../../types";
 
 const Filters: React.FC<FilterProps> = ({ filters, onFilterChange }) => {
   return (

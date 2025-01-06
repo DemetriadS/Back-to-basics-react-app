@@ -1,11 +1,5 @@
-import React, { useState, Profiler, ReactNode } from "react";
-
-interface ProfilerComponentProps {
-  users: [];
-  hasError: boolean;
-  profileLoaded: boolean;
-  children: ReactNode;
-}
+import React, { useState, Profiler } from "react";
+import { ProfilerComponentProps } from "../../types";
 
 const ProfilerComponent: React.FC<ProfilerComponentProps> = ({
   users,

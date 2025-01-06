@@ -1,17 +1,6 @@
 import React from "react";
 import "./UserList.css";
-
-interface User {
-  name: {
-    first: string;
-    last: string;
-  };
-}
-
-interface UserListProps {
-  hasError: boolean;
-  users: User[];
-}
+import { UserListProps } from "../../types";
 
 const UserList: React.FC<UserListProps> = ({ hasError, users }) => {
   if (hasError) {
