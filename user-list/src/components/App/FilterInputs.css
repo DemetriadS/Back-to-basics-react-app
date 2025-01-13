@@ -8,8 +8,19 @@
 
 .filters input {
   padding: 8px;
-  font-size: 14px;
+  font-size: 18px;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+.filter-gender {
+  display: flex;
+}
+
+.filter-gender select {
+  color: #888;
+  font-size: 18px;
+  margin: 0 20px;
+  text-align: center;
 }

@@ -11,6 +11,12 @@ import ErrorBoundaryComponent from "./ErrorBoundary.tsx";
 import "./App.css";
 import ProfilerComponent from "./AppProfiler.tsx";
 import Filters from "./FilterInputs.tsx";
+import {
+  API_URL,
+  ERROR_MESSAGES,
+  LOADING_TEXT,
+  TITLE,
+} from "../../utils/constants.ts";
 
 const UserList = React.lazy(() => import("../UserList/UserList.tsx"));
 
@@ -23,10 +29,10 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setHasError(false);
-    fetch("https://randomuser.me/api/?results=10&nat=us")
+    fetch(API_URL)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Error fetching data");
+          throw new Error(ERROR_MESSAGES.FETCH_DATA_ERROR);
         }
         return response.json();
       })
@@ -37,9 +43,9 @@ const App: React.FC = () => {
       .catch(() => {
         setHasError(true);
         setProfileLoaded(true);
-        console.error("Error fetching data");
       });
   }, [dispatch]);
+
   const filteredUsers = useSelector((state: RootState) =>
     selectFilteredUsers(state)
   );
@@ -58,11 +64,11 @@ const App: React.FC = () => {
       hasError={hasError}
       profileLoaded={profileLoaded}
     >
-      <h1>User List</h1>
+      <h1>{TITLE}</h1>
       <div className="App">
         <Filters filters={filters} onFilterChange={handleFilterChange} />
-        {isPending && <div>Updating list...</div>}
-        <Suspense fallback={<div>Loading...</div>}>
+        {isPending && <div>{LOADING_TEXT.UPDATING_LIST}</div>}
+        <Suspense fallback={<div>{LOADING_TEXT.LOADING}</div>}>
           <ErrorBoundaryComponent>
             <UserList hasError={hasError} users={filteredUsers} />
           </ErrorBoundaryComponent>

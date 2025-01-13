@@ -1,25 +1,26 @@
 import React from "react";
 import "./UserList.css";
 import { UserListProps } from "../../types";
+import { ERROR_MESSAGES, TABLE_HEADERS } from "../../utils/constants.ts";
 
 const UserList: React.FC<UserListProps> = ({ hasError, users }) => {
   if (hasError) {
-    throw new Error("No users available");
+    throw new Error(ERROR_MESSAGES.NO_USERS_AVAILABLE);
   }
 
   return (
     <>
       {!users.length ? (
-        <div>No users available to display.</div>
+        <div>{ERROR_MESSAGES.NO_USERS_TO_DISPLAY}</div>
       ) : (
         <table>
           <thead>
             <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>City</th>
-              <th>Gender</th>
-              <th>Age</th>
+              <th>{TABLE_HEADERS.FIRST_NAME}</th>
+              <th>{TABLE_HEADERS.LAST_NAME}</th>
+              <th>{TABLE_HEADERS.CITY}</th>
+              <th>{TABLE_HEADERS.GENDER}</th>
+              <th>{TABLE_HEADERS.AGE}</th>
             </tr>
           </thead>
           <tbody>
