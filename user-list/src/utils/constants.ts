@@ -1,4 +1,4 @@
-export const API_URL = "https://randomsuser.me/api/?results=10&nat=us";
+export const API_URL = "https://randomuser.me/api/?results=10&nat=us";
 
 export const PLACEHOLDER_TEXTS = {
   age: "Filter by age",

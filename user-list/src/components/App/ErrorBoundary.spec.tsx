@@ -16,7 +16,11 @@ describe("ErrorBoundary Component", () => {
 
     // Check if the fallback UI is rendered
     expect(screen.getByRole("alert")).toBeInTheDocument();
-    expect(screen.getByText("Something went wrong:")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "Something went wrong, don't worry, it is not your fault:"
+      )
+    ).toBeInTheDocument();
     expect(screen.getByText("Test error")).toBeInTheDocument();
   });
 

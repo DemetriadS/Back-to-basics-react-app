@@ -16,8 +16,13 @@ export function useDataFetch<T>(url: string): UseDataFetchResult<T> {
       setLoading(true);
       setError(null);
       try {
-        console.log("1");
+        // console.log("1", error);
         const response = await fetch(url);
+        // console.log(response, error);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
         const result: T = await response.json();
         setData(result);
       } catch (err) {

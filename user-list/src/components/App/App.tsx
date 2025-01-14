@@ -12,7 +12,7 @@ import "./App.css";
 import ProfilerComponent from "./AppProfiler.tsx";
 import Filters from "./FilterInputs.tsx";
 import { API_URL, LOADING_TEXT, TITLE } from "../../utils/constants.ts";
-import { useDataFetch } from "../../hooks/useDataFetch.ts";
+import { useDataFetch } from "../../hooks/useDataFetch.tsx";
 import { User } from "../../types/index.ts";
 
 const UserList = React.lazy(() => import("../UserList/UserList.tsx"));
