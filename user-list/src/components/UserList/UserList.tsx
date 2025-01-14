@@ -5,7 +5,7 @@ import { ERROR_MESSAGES, TABLE_HEADERS } from "../../utils/constants.ts";
 
 const UserList: React.FC<UserListProps> = ({ hasError, users }) => {
   if (hasError) {
-    throw new Error(ERROR_MESSAGES.NO_USERS_AVAILABLE);
+    throw new Error(hasError);
   }
 
   return (

@@ -11,40 +11,32 @@ import ErrorBoundaryComponent from "./ErrorBoundary.tsx";
 import "./App.css";
 import ProfilerComponent from "./AppProfiler.tsx";
 import Filters from "./FilterInputs.tsx";
-import {
-  API_URL,
-  ERROR_MESSAGES,
-  LOADING_TEXT,
-  TITLE,
-} from "../../utils/constants.ts";
+import { API_URL, LOADING_TEXT, TITLE } from "../../utils/constants.ts";
+import { useDataFetch } from "../../hooks/useDataFetch.ts";
+import { User } from "../../types/index.ts";
 
 const UserList = React.lazy(() => import("../UserList/UserList.tsx"));
 
 const App: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { users, filters } = useSelector((state: RootState) => state);
-  const [isPending, startTransition] = useTransition();
-  const [hasError, setHasError] = useState<boolean>(false);
+  const { filters } = useSelector((state: RootState) => state);
+  const [startTransition] = useTransition();
   const [profileLoaded, setProfileLoaded] = useState<boolean>(false);
 
+  const { data, error, loading } = useDataFetch<{ results: User[] }>(API_URL);
+  console.log(data, error, loading);
+
   useEffect(() => {
-    setHasError(false);
-    fetch(API_URL)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(ERROR_MESSAGES.FETCH_DATA_ERROR);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setProfileLoaded(true);
-        dispatch(setUsers(data.results));
-      })
-      .catch(() => {
-        setHasError(true);
-        setProfileLoaded(true);
-      });
-  }, [dispatch]);
+    if (loading) {
+      setProfileLoaded(false);
+    } else {
+      setProfileLoaded(true);
+    }
+
+    if (data && data.results) {
+      dispatch(setUsers(data.results));
+    }
+  }, [data, error, loading, dispatch]);
 
   const filteredUsers = useSelector((state: RootState) =>
     selectFilteredUsers(state)
@@ -60,17 +52,16 @@ const App: React.FC = () => {
   return (
     <ProfilerComponent
       id="App"
-      users={users}
-      hasError={hasError}
+      users={data?.results || []}
+      hasError={error}
       profileLoaded={profileLoaded}
     >
       <h1>{TITLE}</h1>
       <div className="App">
         <Filters filters={filters} onFilterChange={handleFilterChange} />
-        {isPending && <div>{LOADING_TEXT.UPDATING_LIST}</div>}
-        <Suspense fallback={<div>{LOADING_TEXT.LOADING}</div>}>
+        <Suspense fallback={<h2>{LOADING_TEXT.LOADING}</h2>}>
           <ErrorBoundaryComponent>
-            <UserList hasError={hasError} users={filteredUsers} />
+            <UserList hasError={error} users={filteredUsers} />
           </ErrorBoundaryComponent>
         </Suspense>
       </div>

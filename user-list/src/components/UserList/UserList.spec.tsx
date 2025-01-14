@@ -50,6 +50,6 @@ describe("UserList", () => {
   it("throws an error if there is an error with the user list", () => {
     expect(() =>
       render(<UserList hasError={true} users={mockUsers} />)
-    ).toThrowError("No users available");
+    ).toThrowError("true");
   });
 });
